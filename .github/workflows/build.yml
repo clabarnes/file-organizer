@@ -1,70 +1,58 @@
 name: Build File Organizer
 
 on:
-  # Run on pushes to main branch
   push:
     branches: [ main ]
-  # Run on pull requests to main branch
   pull_request:
     branches: [ main ]
-  # Allow manual triggering
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
-    # Check out the repository code
     - name: Checkout code
-      uses: actions/checkout@v3
-    
-    # Setup Node.js environment
+      uses: actions/checkout@v2
+
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
         node-version: 16
         cache: 'npm'
-    
-    # Install all dependencies
+
     - name: Install dependencies
       run: |
         npm install
-      
-    # Setup Python (needed for some native dependencies)
+
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v2
       with:
         python-version: '3.x'
-    
-    # Install Windows build tools if needed
+
     - name: Install Windows build tools
       run: |
         npm config set msvs_version 2019
-    
-    # Build the Next.js application
+
     - name: Build Next.js app
       run: |
         npm run build
       env:
         CI: false
-    
-    # Build the Electron application
+
     - name: Build Electron app
       run: |
         npm run electron:build
       env:
         CI: false
-    
-    # Upload the installer as an artifact
+
     - name: Upload Windows Installer
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: file-organizer-installer
         path: dist/*.exe
         retention-days: 30
-    
-    # Create a GitHub release for tagged commits
+
     - name: Create Release
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v1
@@ -75,29 +63,17 @@ jobs:
         name: File Organizer v${{ github.run_number }}
         body: |
           ## File Organizer Release
-          
+
           Automated build from the latest code.
-          
+
           ### Installation
           1. Download the installer
           2. Run the installer
           3. Launch the application from your Start menu
-          
+
           ### Changes
           - Latest updates from the main branch
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    # Notify on build completion (optional)
-    - name: Notify on success
-      if: success()
-      run: |
-        echo "Build completed successfully! The installer is available as an artifact."
-    
-    # Notify on build failure (optional)
-    - name: Notify on failure
-      if: failure()
-      run: |
-        echo "Build failed. Check the logs for more information."
