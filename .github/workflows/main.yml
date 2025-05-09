@@ -18,7 +18,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: '20'
         cache: 'npm'
 
     - name: Install dependencies
@@ -53,8 +53,7 @@ jobs:
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          dist/*.exe
+        files: dist/*.exe
         tag_name: v${{ github.run_number }}
         name: File Organizer v${{ github.run_number }}
         body: |
