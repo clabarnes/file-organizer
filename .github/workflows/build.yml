@@ -43,7 +43,7 @@ jobs:
         CI: false
 
     - name: Upload Windows Installer
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@b2d071e6c5cb5c1224b239b7d67d595b354578e0
       with:
         name: file-organizer-installer
         path: dist/*.exe
