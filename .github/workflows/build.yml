@@ -21,15 +21,16 @@ jobs:
         node-version: 16
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm install --legacy-peer-deps
-
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
 
-    - name: Install Windows build tools
+    - name: Install dependencies
+      run: |
+        npm install --legacy-peer-deps
+
+    - name: Set MSVS Version
       run: npm config set msvs_version 2019
 
     - name: Build Next.js app
@@ -43,7 +44,7 @@ jobs:
         CI: false
 
     - name: Upload Windows Installer
-      uses: actions/upload-artifact@b2d071e6c5cb5c1224b239b7d67d595b354578e0
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: file-organizer-installer
         path: dist/*.exe
@@ -58,15 +59,16 @@ jobs:
         name: File Organizer v${{ github.run_number }}
         body: |
           ## File Organizer Release
-          
-          Automated build from the latest code.
-          
+          Automated build from latest code.
+
           ### Installation
           1. Download the installer
           2. Run the installer
-          3. Launch the application from your Start menu
-          
-          ### Changes
-          - Latest updates from the main branch
+          3. Launch the app
+
+          ### What's New
+          - Latest updates from main
+        draft: false
+        prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
