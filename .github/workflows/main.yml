@@ -15,11 +15,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Setup Node.js 20
+      uses: actions/setup-node@v3
       with:
         node-version: '20'
         cache: 'npm'
+
+    - name: Verify Node.js version
+      run: node -v
 
     - name: Install dependencies
       run: npm install --legacy-peer-deps
@@ -53,7 +56,8 @@ jobs:
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/*.exe
+        files: |
+          dist/*.exe
         tag_name: v${{ github.run_number }}
         name: File Organizer v${{ github.run_number }}
         body: |
