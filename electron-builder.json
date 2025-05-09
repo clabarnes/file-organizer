@@ -1,0 +1,27 @@
+{
+  "appId": "com.fileorganizer.app",
+  "productName": "File Organizer",
+  "directories": {
+    "output": "dist"
+  },
+  "files": ["out/**/*", "electron/**/*"],
+  "win": {
+    "target": ["nsis"],
+    "icon": "electron/icons/icon.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "File Organizer"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "icon": "electron/icons/icon.icns"
+  },
+  "linux": {
+    "target": ["AppImage"],
+    "icon": "electron/icons/icon.png"
+  }
+}
